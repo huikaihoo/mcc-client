@@ -5,8 +5,8 @@ import * as React from 'react';
 
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
-import TabOneScreen from '../screens/TabOneScreen';
-import TabTwoScreen from '../screens/TabTwoScreen';
+import CalanderScreen from '../screens/CalanderScreen';
+import SettingsScreen from '../screens/SettingsScreen';
 import { BottomTabParamList, TabOneParamList, TabTwoParamList } from '../types';
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
@@ -17,19 +17,21 @@ export default function BottomTabNavigator() {
   return (
     <BottomTab.Navigator
       initialRouteName="TabOne"
-      tabBarOptions={{ activeTintColor: Colors[colorScheme].tint }}>
+      tabBarOptions={{ activeTintColor: Colors[colorScheme].tint,  }}>
       <BottomTab.Screen
         name="TabOne"
         component={TabOneNavigator}
         options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
+          tabBarLabel: "Calendar",
+          tabBarIcon: ({ color }) => <TabBarIcon name="md-calendar" color={color} />,
         }}
       />
       <BottomTab.Screen
         name="TabTwo"
         component={TabTwoNavigator}
         options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
+          tabBarLabel: "Settings",
+          tabBarIcon: ({ color }) => <TabBarIcon name="md-settings" color={color} />,
         }}
       />
     </BottomTab.Navigator>
@@ -51,8 +53,8 @@ function TabOneNavigator() {
     <TabOneStack.Navigator>
       <TabOneStack.Screen
         name="TabOneScreen"
-        component={TabOneScreen}
-        options={{ headerTitle: 'Tab One Title' }}
+        component={CalanderScreen}
+        options={{ headerTitle: 'Calander' }}
       />
     </TabOneStack.Navigator>
   );
@@ -65,8 +67,8 @@ function TabTwoNavigator() {
     <TabTwoStack.Navigator>
       <TabTwoStack.Screen
         name="TabTwoScreen"
-        component={TabTwoScreen}
-        options={{ headerTitle: 'Tab Two Title' }}
+        component={SettingsScreen}
+        options={{ headerTitle: 'Settings' }}
       />
     </TabTwoStack.Navigator>
   );
