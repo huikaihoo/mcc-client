@@ -1,6 +1,6 @@
 import { StackScreenProps } from '@react-navigation/stack';
 import * as React from 'react';
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TextInput, View } from 'react-native';
 
 import { RootStackParamList } from '../types';
 import { ActionButton, LinkedText, StyledTextInput } from '../components';
@@ -12,7 +12,7 @@ export default function LoginScreen({
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
 
-  const { signIn } = React.useContext(AuthContext) as any;
+  const { signIn, clearMessage, message } = React.useContext(AuthContext) as any;
 
   const isDisable = () => email.length <= 0 || password.length <= 0;
 
@@ -29,8 +29,9 @@ export default function LoginScreen({
         placeholder="Password..."
         value={password}
         onChangeText={setPassword}/>
+      <Text>{message}</Text>
       <ActionButton disabled={isDisable()} onPress={() => signIn({ email, password })}>LOGIN</ActionButton>
-      <LinkedText onPress={() => navigation.navigate('Signup')}>New user? Sign up for Medical App</LinkedText>
+      <LinkedText onPress={() => {clearMessage(); navigation.navigate('Signup')}}>New user? Sign up for Medical App</LinkedText>
     </View>
   );
 }

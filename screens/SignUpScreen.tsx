@@ -15,7 +15,7 @@ export default function SignUpScreen({
   const [phone, setPhone] = React.useState('');
   const [address, setAddress] = React.useState('');
 
-  const { Signup } = React.useContext(AuthContext) as any;
+  const { signUp, clearMessage, message } = React.useContext(AuthContext) as any;
 
   const isDisable = () => email.length <= 0 || password.length <= 0 || clinicName.length <= 0 || phone.length <= 0 || address.length <= 0;
 
@@ -44,8 +44,14 @@ export default function SignUpScreen({
         placeholder="Address..."
         value={address}
         onChangeText={setAddress}/>
-      <ActionButton disabled={isDisable()} onPress={() => Signup({ email, password, clinicName, phone, address })}>SIGNUP</ActionButton>
-      <LinkedText onPress={() => navigation.replace('Login')}>Already have an account? Log in now!</LinkedText>
+      <Text>{message}</Text>
+      <ActionButton disabled={isDisable()} onPress={ async () => {
+        const isSuccess = await signUp({ email, password, clinicName, phone, address });
+        if (isSuccess) {
+          navigation.replace('Root');
+        }
+      }}>SIGNUP</ActionButton>
+      <LinkedText onPress={() => {clearMessage(); navigation.replace('Login')}}>Already have an account? Log in now!</LinkedText>
     </View>
   );
 }
