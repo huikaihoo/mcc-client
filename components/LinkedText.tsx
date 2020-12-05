@@ -1,7 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, TouchableOpacity, TouchableWithoutFeedbackProps } from 'react-native';
-
-import { Text } from './Themed';
+import { StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedbackProps } from 'react-native';
 
 const LinkedText: React.FunctionComponent<TouchableWithoutFeedbackProps> = (props) => (
   <TouchableOpacity style={styles.link} {...props}>

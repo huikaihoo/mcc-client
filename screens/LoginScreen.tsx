@@ -19,7 +19,6 @@ export default function LoginScreen({
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Log in to Medical App</Text>
-      <View style={styles.separator} />
       <StyledTextInput
         placeholder="Email..."
         value={email}
@@ -47,7 +46,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: 'bold',
-    paddingVertical: 15,
+    paddingVertical: 30,
   },
   separator: {
     backgroundColor: 'black',

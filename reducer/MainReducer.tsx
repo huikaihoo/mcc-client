@@ -1,6 +1,6 @@
 import * as React from "react";
 
-const RootReducer = () => {
+const MainReducer = () => {
   return React.useReducer(
     (prevState: any, action: any) => {
       switch (action.type) {
@@ -41,4 +41,4 @@ const RootReducer = () => {
   );
 };
 
-export default RootReducer;
+export default MainReducer;

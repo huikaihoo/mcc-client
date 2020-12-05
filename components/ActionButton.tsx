@@ -1,7 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, TouchableOpacity, TouchableWithoutFeedbackProps } from 'react-native';
-
-import { Text, TextProps } from './Themed';
+import { Text, StyleSheet, TouchableOpacity, TouchableWithoutFeedbackProps } from 'react-native';
 
 const ActionButton: React.FunctionComponent<TouchableWithoutFeedbackProps> = (props) => {
   let buttonStyle = props.disabled ? styles.disabledButton : (props.style || styles.button)

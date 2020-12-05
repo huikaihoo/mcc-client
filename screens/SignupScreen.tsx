@@ -22,7 +22,6 @@ export default function SignUpScreen({
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Create your account</Text>
-      <View style={styles.separator} />
       <StyledTextInput
         placeholder="Email..."
         value={email}
@@ -67,6 +66,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: 'bold',
+    paddingVertical: 30,
   },
   separator: {
     backgroundColor: 'black',

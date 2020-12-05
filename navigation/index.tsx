@@ -6,9 +6,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { signinApi, signupApi } from '../api/authApi';
 import AuthContext from '../context/AuthContext';
-import RootReducer from '../reducer/RootReducer';
+import MainReducer from '../reducer/MainReducer';
 import LoginScreen from '../screens/LoginScreen';
-import SignUpScreen from '../screens/SignUpScreen';
+import SignUpScreen from '../screens/SignupScreen';
 import LoadingScreen from '../screens/LoadingScreen';
 import { RootStackParamList } from '../types';
 import BottomTabNavigator from './BottomTabNavigator';
@@ -19,8 +19,7 @@ import LinkingConfiguration from './LinkingConfiguration';
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
     <NavigationContainer
-      linking={LinkingConfiguration}
-      theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+      linking={LinkingConfiguration}>
       <RootNavigator />
     </NavigationContainer>
   );
@@ -31,7 +30,7 @@ export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeNa
 const Stack = createStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
-  const [state, dispatch] = RootReducer();
+  const [state, dispatch] = MainReducer();
 
   React.useEffect(() => {
     // Fetch the token from storage then navigate to our appropriate place

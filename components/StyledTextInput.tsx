@@ -3,7 +3,7 @@ import { StyleSheet, View, TextInput, TextInputProps } from 'react-native';
 
 const StyledTextInput: React.FunctionComponent<TextInputProps> = (props) => (
   <View style={styles.inputView}>
-    <TextInput style={styles.inputText} {...props}/>
+    <TextInput placeholderTextColor="white" style={styles.inputText} {...props}/>
   </View>
 )
 
