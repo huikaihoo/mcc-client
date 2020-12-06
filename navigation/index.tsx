@@ -5,6 +5,7 @@ import { Alert, ColorSchemeName } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { signinApi, signupApi } from '../api/authApi';
+import { recordsApi } from '../api/dataApi';
 import AuthContext from '../context/AuthContext';
 import MainReducer from '../reducer/MainReducer';
 import LoginScreen from '../screens/LoginScreen';
@@ -35,10 +36,10 @@ function RootNavigator() {
   React.useEffect(() => {
     // Fetch the token from storage then navigate to our appropriate place
     const bootstrapAsync = async () => {
-      let userToken;
+      let accessToken;
 
       try {
-        userToken = await AsyncStorage.getItem('userToken');
+        accessToken = await AsyncStorage.getItem('accessToken');
       } catch (e) {
         // Restoring token failed
       }
@@ -47,7 +48,7 @@ function RootNavigator() {
 
       // This will switch to the App screen or Auth screen and this loading
       // screen will be unmounted and thrown away.
-      dispatch({ type: 'RESTORE_TOKEN', token: userToken });
+      dispatch({ type: 'RESTORE_TOKEN', token: accessToken });
     };
 
     bootstrapAsync();
@@ -56,16 +57,16 @@ function RootNavigator() {
   const authContext = React.useMemo(
     () => ({
       signIn: async (data: { email: string, password: string}) => {
-        dispatch({ type: 'SIGN_IN', token: '123' });
-        // try {
-        //   const result = await signinApi(data);
-        //   if (result.data.accessToken) {
-        //     dispatch({ type: 'SIGN_IN', token: result.data.accessToken });
-        //   }
-        // } catch (err) {
-        //   dispatch({ type: 'MESSAGE', message: 'invalid login credentials' });
-        //   console.log(err);
-        // }
+        // dispatch({ type: 'SIGN_IN', token: '123' });
+        try {
+          const result = await signinApi(data);
+          if (result.data.accessToken) {
+            dispatch({ type: 'SIGN_IN', token: result.data.accessToken });
+          }
+        } catch (err) {
+          dispatch({ type: 'MESSAGE', message: 'invalid login credentials' });
+          console.log(err);
+        }
       },
       signOut: () => dispatch({ type: 'SIGN_OUT' }),
       signUp: async (data: any) => {
@@ -90,7 +91,29 @@ function RootNavigator() {
         }
         return false;
       },
-      clearMessage: () => dispatch({ type: 'MESSAGE', message: '' }),
+      fetchRecords: async (data: { accessToken: string, from: number, to: number }) => {
+        try {
+          const result = await recordsApi({
+            offset: 0,
+            limit: 100,
+            ...data
+          });
+          // console.log(data, result.data);
+          if (result.data.total > 0 && result.data.results.length > 0) {
+            const results = result.data.results
+            const records: { [key: string]: any } = {};
+            results.forEach(result => {
+              records[result.id] = result;
+            })
+            console.log(records);
+            dispatch({ type: 'ADD_RECORDS', records });
+          }
+        } catch (err) {
+          dispatch({ type: 'MESSAGE', message: 'invalid login credentials' });
+          console.log(err);
+        }
+      },
+      displayMessage: (message: string = '') => dispatch({ type: 'MESSAGE', message }),
     }),
     []
   );
@@ -101,7 +124,7 @@ function RootNavigator() {
         {state.isLoading ? (
             // We haven't finished checking for the token yet
             <Stack.Screen name="Loading" component={LoadingScreen} />
-          ) : state.userToken == null ? (
+          ) : state.accessToken == null ? (
             // No token found, user isn't signed in
             <Stack.Screen
               name="Login"

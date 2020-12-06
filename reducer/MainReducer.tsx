@@ -7,7 +7,7 @@ const MainReducer = () => {
         case "RESTORE_TOKEN":
           return {
             ...prevState,
-            userToken: action.token,
+            accessToken: action.token,
             isLoading: false,
             message: "",
           };
@@ -15,16 +15,36 @@ const MainReducer = () => {
           return {
             ...prevState,
             isSignout: false,
-            userToken: action.token,
+            accessToken: action.token,
             message: "",
           };
         case "SIGN_OUT":
           return {
             ...prevState,
             isSignout: true,
-            userToken: null,
+            accessToken: null,
             message: "",
+            records: [],
           };
+        case "ADD_RECORDS":
+          let newRecords: { [key: string]: any } = {};
+          let hasUpdate = false;
+
+          for (const property in action.records) {
+            if (!prevState.records[property]) {
+              newRecords[property] = action.records[property];
+              hasUpdate = true;
+            }
+          }
+
+          if (hasUpdate) {
+            return {
+              ...prevState,
+              records: { ...prevState.records, ...action.records },
+            };
+          } else {
+            return prevState;
+          }
         case "MESSAGE":
           return {
             ...prevState,
@@ -35,8 +55,9 @@ const MainReducer = () => {
     {
       isLoading: true,
       isSignout: false,
-      userToken: null,
+      accessToken: null,
       message: "",
+      records: {},
     }
   );
 };

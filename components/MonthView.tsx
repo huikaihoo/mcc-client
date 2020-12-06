@@ -1,108 +1,83 @@
-import React, { Component } from 'react';
+import * as React from 'react';
 import { Alert, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { Agenda } from 'react-native-calendars';
+import moment from 'moment';
 
-interface IProps {
+import AuthContext from '../context/AuthContext';
+
+const convert = (records: any, current: number) => {
+  const items: { [key: string]: any[] } = {};
+
+  if (current > 0) {
+    const from = moment(current).startOf('month').subtract(1, 'month');
+    const to = moment(current).startOf('month').add(2, 'month');
+    for (let m = moment(from); m.isBefore(to); m.add(1, 'day')) {
+      items[m.format('YYYY-MM-DD')] = [];
+      // if (m.day() % 3 === 0) {
+      //   items[m.format('YYYY-MM-DD')].push({
+      //     id: m.format('YYYY-MM-DD'),
+      //     patientName: 'Dummy',
+      //     datetime: moment().format(),
+      //   })
+      // }
+    }
+  }
+
+  for (const property in records) {
+    const record = records[property];
+    const key = moment(record.datetime).format('YYYY-MM-DD');
+    if (!items[key]) {
+      items[key] = [];
+    }
+    items[key].push(record)
+  }
+  console.log('items', items);
+  return items;
 }
 
-interface IState {
-  items: { [key:string]:any; } ;
+const renderItem = (item: any) => {
+  return (
+    <TouchableOpacity style={styles.item} onPress={() => Alert.alert(item.id)}>
+      <Text>{item.patientName} @ {moment(item.datetime).format('HH:mm')}</Text>
+    </TouchableOpacity>
+  );
 }
 
-export default class MonthView extends Component<IProps, IState> {
-  constructor(props: any) {
-    super(props);
+const renderEmptyDate = () => {
+  return (
+    <View style={styles.emptyDate}>
+      <Text>(No consultations)</Text>
+    </View>
+  );
+}
 
-    this.state = {
-      items: {}
-    };
-  }
+const MonthView = (props: any) => {
+  const [current, setCurrent] = React.useState(0);
 
-  render() {
-    return (
-      <Agenda
-        items={this.state.items}
-        loadItemsForMonth={this.loadItems.bind(this)}
-        selected={'2020-05-16'}
-        renderItem={this.renderItem.bind(this)}
-        renderEmptyDate={this.renderEmptyDate.bind(this)}
-        rowHasChanged={this.rowHasChanged.bind(this)}
-        // markingType={'period'}
-        // markedDates={{
-        //    '2017-05-08': {textColor: '#43515c'},
-        //    '2017-05-09': {textColor: '#43515c'},
-        //    '2017-05-14': {startingDay: true, endingDay: true, color: 'blue'},
-        //    '2017-05-21': {startingDay: true, color: 'blue'},
-        //    '2017-05-22': {endingDay: true, color: 'gray'},
-        //    '2017-05-24': {startingDay: true, color: 'gray'},
-        //    '2017-05-25': {color: 'gray'},
-        //    '2017-05-26': {endingDay: true, color: 'gray'}}}
-        // monthFormat={'yyyy'}
-        theme={{
-          agendaDayTextColor: 'yellow',
-          agendaDayNumColor: 'green',
-          agendaTodayColor: 'red',
-        }}
-        // theme={{calendarBackground: 'red', agendaKnobColor: 'green'}}
-        //renderDay={(day, item) => (<Text>{day ? day.day: 'item'}</Text>)}
-        // hideExtraDays={false}
-      />
-    );
-  }
+  const { fetchRecords, accessToken, records } = React.useContext(AuthContext) as any;
 
-  loadItems(day: any) {
-    setTimeout(() => {
-      for (let i = -15; i < 85; i++) {
-        const time = day.timestamp + i * 24 * 60 * 60 * 1000;
-        const strTime = this.timeToString(time);
-        if (!this.state.items[strTime]) {
-          this.state.items[strTime] = [];
-          const numItems = Math.floor(Math.random() * 3 + 1);
-          for (let j = 0; j < numItems; j++) {
-            this.state.items[strTime].push({
-              name: 'Item for ' + strTime + ' #' + j,
-              height: Math.max(50, Math.floor(Math.random() * 150))
-            });
-          }
-        }
-      }
-      const newItems: { [key:string]:any;} = {};
-      Object.keys(this.state.items).forEach(key => {
-        newItems[key] = this.state.items[key];
-      });
-      this.setState({
-        items: newItems
-      });
-    }, 1000);
-  }
-
-  renderItem(item: any) {
-    return (
-      <TouchableOpacity
-        style={[styles.item, {height: item.height}]}
-        onPress={() => Alert.alert(item.name)}
-      >
-        <Text>{item.name}</Text>
-      </TouchableOpacity>
-    );
-  }
-
-  renderEmptyDate() {
-    return (
-      <View style={styles.emptyDate}>
-        <Text>This is empty date!</Text>
-      </View>
-    );
-  }
-
-  rowHasChanged(r1: any, r2: any) {
-    return r1.name !== r2.name;
-  }
-
-  timeToString(time: any) {
-    const date = new Date(time);
-    return date.toISOString().split('T')[0];
-  }
+  return (
+    <Agenda
+      items={convert(records, current)}
+      loadItemsForMonth={(date) => {
+        setCurrent(date.timestamp);
+        fetchRecords({
+          accessToken,
+          from: moment(date.timestamp).startOf('month').format("X"),
+          to: moment(date.timestamp).endOf('month').format("X"),
+        });
+      }}
+      selected={'2020-12-03'}
+      renderItem={(item) => renderItem(item)}
+      renderEmptyDate={() => renderEmptyDate()}
+      rowHasChanged={(r1, r2) => {return r1.id !== r2.id}}
+      theme={{
+        agendaDayTextColor: 'yellow',
+        agendaDayNumColor: 'green',
+        agendaTodayColor: 'red',
+      }}
+    />
+  );
 }
 
 const styles = StyleSheet.create({
@@ -120,3 +95,5 @@ const styles = StyleSheet.create({
     paddingTop: 30
   }
 });
+
+export default MonthView;

@@ -12,7 +12,7 @@ export default function LoginScreen({
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
 
-  const { signIn, clearMessage, message } = React.useContext(AuthContext) as any;
+  const { signIn, displayMessage, message } = React.useContext(AuthContext) as any;
 
   const isDisable = () => email.length <= 0 || password.length <= 0;
 
@@ -30,7 +30,7 @@ export default function LoginScreen({
         onChangeText={setPassword}/>
       <Text>{message}</Text>
       <ActionButton disabled={isDisable()} onPress={() => signIn({ email, password })}>LOGIN</ActionButton>
-      <LinkedText onPress={() => {clearMessage(); navigation.navigate('Signup')}}>New user? Sign up for Medical App</LinkedText>
+      <LinkedText onPress={() => {displayMessage(''); navigation.navigate('Signup')}}>New user? Sign up for Medical App</LinkedText>
     </View>
   );
 }

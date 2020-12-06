@@ -6,7 +6,7 @@ import WeekView from '../components/WeekView';
 export default function TabWeekScreen() {
   return (
     <View style={styles.container}>
-      <WeekView></WeekView>
+      <WeekView mode='week'></WeekView>
     </View>
   );
 }

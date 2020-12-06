@@ -3,41 +3,37 @@ import { Dimensions, StyleSheet } from 'react-native';
 import { Calendar } from 'react-native-big-calendar';
 import moment from 'moment';
 
-const events = [
-  {
-    title: 'Meeting',
-    start: moment().set('hour', 10).set('minute', 0).toDate(),
-    end: moment().set('hour', 10).set('minute', 30).toDate(),
-  },
-  {
-    title: 'Coffee break',
-    start: moment().set('hour', 14).set('minute', 30).toDate(),
-    end: moment().set('hour', 15).set('minute', 30).toDate(),
-  },
-  {
-    title: 'Repair my car',
-    start: moment().add(1, 'day').set('hour', 7).set('minute', 45).toDate(),
-    end: moment().add(1, 'day').set('hour', 13).set('minute', 30).toDate(),
-  },
-  {
-    title: 'Meet Realtor',
-    start: moment().add(1, 'day').set('hour', 8).set('minute', 25).toDate(),
-    end: moment().add(1, 'day').set('hour', 9).set('minute', 55).toDate(),
-  },
-  {
-    title: 'Laundry',
-    start: moment().add(1, 'day').set('hour', 8).set('minute', 25).toDate(),
-    end: moment().add(1, 'day').set('hour', 11).set('minute', 0).toDate(),
-  },
-]
+import AuthContext from '../context/AuthContext';
 
-export default function DayView() {
+const convert = (records: any) => {
+  const events: any[] = [];
+  for (const property in records) {
+    const record = records[property]
+    events.push({
+      title: record.patientName,
+      start: moment(record.datetime).toDate(),
+      end: moment(record.datetime).add(30, 'minute').toDate(),
+    })
+  }
+  console.log('events', events);
+
+  return events;
+}
+
+const WeekView = (props: any) => {
+  const { fetchRecords, accessToken, records } = React.useContext(AuthContext) as any;
+
   return (
     <Calendar
       style={styles.calendar}
       height={Dimensions.get('window').height}
-      events={events}
-      mode="week"
+      events={convert(records)}
+      onChangeDate={(range) => fetchRecords({
+        accessToken,
+        from: moment(range[0]).set({'hour': 0, 'minute': 0, 'second': 0}).format("X"),
+        to: moment(range[1]).set({'hour': 23, 'minute': 59, 'second': 59}).format("X")
+      })}
+      mode={props.mode}
     />
   );
 }
@@ -49,3 +45,5 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
 });
+
+export default WeekView;

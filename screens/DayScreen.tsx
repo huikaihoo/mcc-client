@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import DayView from '../components/DayView';
+import WeekView from '../components/WeekView';
 
-export default function TabWeekScreen() {
+export default function TabDayScreen() {
   return (
     <View style={styles.container}>
-      <DayView></DayView>
+      <WeekView mode='day'></WeekView>
     </View>
   );
 }

@@ -15,7 +15,7 @@ export default function SignUpScreen({
   const [phone, setPhone] = React.useState('');
   const [address, setAddress] = React.useState('');
 
-  const { signUp, clearMessage, message } = React.useContext(AuthContext) as any;
+  const { signUp, displayMessage, message } = React.useContext(AuthContext) as any;
 
   const isDisable = () => email.length <= 0 || password.length <= 0 || clinicName.length <= 0 || phone.length <= 0 || address.length <= 0;
 
@@ -50,7 +50,7 @@ export default function SignUpScreen({
           navigation.replace('Root');
         }
       }}>SIGNUP</ActionButton>
-      <LinkedText onPress={() => {clearMessage(); navigation.replace('Login')}}>Already have an account? Log in now!</LinkedText>
+      <LinkedText onPress={() => {displayMessage(''); navigation.replace('Login')}}>Already have an account? Log in now!</LinkedText>
     </View>
   );
 }
