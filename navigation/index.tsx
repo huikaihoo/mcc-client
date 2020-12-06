@@ -1,8 +1,9 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as React from 'react';
-import { Alert, ColorSchemeName } from 'react-native';
+import { ColorSchemeName } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { sha512 } from "js-sha512";
 
 import { signinApi, signupApi } from '../api/authApi';
 import { recordsApi } from '../api/dataApi';
@@ -60,6 +61,7 @@ function RootNavigator() {
       signIn: async (data: { email: string, password: string}) => {
         // dispatch({ type: 'SIGN_IN', token: '123' });
         try {
+          data.password = sha512(data.password);
           const result = await signinApi(data);
           if (result.data.accessToken) {
             dispatch({ type: 'SIGN_IN', token: result.data.accessToken });
@@ -72,6 +74,7 @@ function RootNavigator() {
       signOut: () => dispatch({ type: 'SIGN_OUT' }),
       signUp: async (data: any) => {
         try {
+          data.password = sha512(data.password);
           const result = await signupApi(data);
           if (result.status === 201) {
             const result = await signinApi(data);
