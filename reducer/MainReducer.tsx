@@ -45,6 +45,18 @@ const MainReducer = () => {
           } else {
             return prevState;
           }
+        case "OPEN_DETAILS":
+          return {
+            ...prevState,
+            showDetails: true,
+            details: action.details,
+          };
+        case "CLOSE_DETAILS":
+          return {
+            ...prevState,
+            showDetails: false,
+            details: null,
+          };
         case "MESSAGE":
           return {
             ...prevState,
@@ -58,6 +70,8 @@ const MainReducer = () => {
       accessToken: null,
       message: "",
       records: {},
+      showDetails: false,
+      details: null,
     }
   );
 };

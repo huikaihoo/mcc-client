@@ -28,9 +28,9 @@ const convert = (records: any, current: number) => {
   return items;
 }
 
-const renderItem = (item: any) => {
+const renderItem = (item: any, openDetails: any) => {
   return (
-    <TouchableOpacity style={styles.item} onPress={() => Alert.alert(item.id)}>
+    <TouchableOpacity style={styles.item} onPress={() => openDetails(item)}>
       <Text>{item.patientName} @ {moment(item.datetime).format('HH:mm')}</Text>
     </TouchableOpacity>
   );
@@ -47,7 +47,7 @@ const renderEmptyDate = () => {
 const MonthView = (props: any) => {
   const [current, setCurrent] = React.useState(0);
 
-  const { fetchRecords, accessToken, records } = React.useContext(AuthContext) as any;
+  const { fetchRecords, accessToken, records, openDetails } = React.useContext(AuthContext) as any;
 
   return (
     <Agenda
@@ -61,7 +61,7 @@ const MonthView = (props: any) => {
         });
       }}
       selected={'2020-12-03'}
-      renderItem={(item) => renderItem(item)}
+      renderItem={(item) => renderItem(item, openDetails)}
       renderEmptyDate={() => renderEmptyDate()}
       rowHasChanged={(r1, r2) => {return r1.id !== r2.id}}
       theme={{

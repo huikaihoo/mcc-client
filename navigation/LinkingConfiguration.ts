@@ -7,6 +7,7 @@ export default {
       Login: "login",
       SignUp: "signup",
       Loading: "loading",
+      Details: "details",
       Root: {
         screens: {
           TabMonth: {

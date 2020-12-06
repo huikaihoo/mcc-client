@@ -13,6 +13,7 @@ const convert = (records: any) => {
       title: record.patientName,
       start: moment(record.datetime).toDate(),
       end: moment(record.datetime).add(30, 'minute').toDate(),
+      details: record,
     })
   }
   console.log('events', events);
@@ -21,7 +22,7 @@ const convert = (records: any) => {
 }
 
 const WeekView = (props: any) => {
-  const { fetchRecords, accessToken, records } = React.useContext(AuthContext) as any;
+  const { fetchRecords, accessToken, records, openDetails } = React.useContext(AuthContext) as any;
 
   return (
     <Calendar
@@ -33,6 +34,7 @@ const WeekView = (props: any) => {
         from: moment(range[0]).set({'hour': 0, 'minute': 0, 'second': 0}).format("X"),
         to: moment(range[1]).set({'hour': 23, 'minute': 59, 'second': 59}).format("X")
       })}
+      onPressEvent={(event: any) => openDetails(event.details)}
       mode={props.mode}
     />
   );

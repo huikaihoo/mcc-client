@@ -11,6 +11,7 @@ import MainReducer from '../reducer/MainReducer';
 import LoginScreen from '../screens/LoginScreen';
 import SignUpScreen from '../screens/SignupScreen';
 import LoadingScreen from '../screens/LoadingScreen';
+import DetailsScreen from '../screens/DetailsScreen';
 import { RootStackParamList } from '../types';
 import BottomTabNavigator from './BottomTabNavigator';
 import LinkingConfiguration from './LinkingConfiguration';
@@ -122,6 +123,8 @@ function RootNavigator() {
           console.log(err);
         }
       },
+      openDetails: (details: any) => dispatch({ type: 'OPEN_DETAILS', details }),
+      closeDetails: () => dispatch({ type: 'CLOSE_DETAILS' }),
       displayMessage: (message: string = '') => dispatch({ type: 'MESSAGE', message }),
     }),
     []
@@ -143,7 +146,10 @@ function RootNavigator() {
                 animationTypeForReplace: state.isSignout ? 'pop' : 'push',
               }}
             />
-          ) : (
+          ) : state.showDetails ? (
+            // User is signed in
+            <Stack.Screen name="Details" component={DetailsScreen} />
+          ): (
             // User is signed in
             <Stack.Screen name="Root" component={BottomTabNavigator} />
         )}

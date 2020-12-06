@@ -1,8 +1,10 @@
 import axios from "axios";
 
+import config from "../config";
+
 const signinApi = async (data: { email: string; password: string }) => {
   return await axios.post<{ accessToken: string }>(
-    "http://localhost:3000/v1/signin",
+    `${config.host}/v1/signin`,
     data,
     {
       headers: {
@@ -19,7 +21,7 @@ const signupApi = async (data: {
   phone: string;
   address: string;
 }) => {
-  return await axios.post("http://localhost:3000/v1/user", data, {
+  return await axios.post(`${config.host}/v1/user`, data, {
     headers: {
       "Content-Type": "application/json",
     },

@@ -1,5 +1,7 @@
 import axios from "axios";
 
+import config from "../config";
+
 const recordsApi = async (data: {
   accessToken: string;
   offset: number;
@@ -9,7 +11,7 @@ const recordsApi = async (data: {
 }) => {
   const { accessToken, offset, limit, from, to } = data;
   return await axios.get<{ total: number; results: any[] }>(
-    `http://localhost:3000/v1/consultations?offset=${offset}&limit=${limit}&from=${from}&to=${to}`,
+    `${config.host}/v1/consultations?offset=${offset}&limit=${limit}&from=${from}&to=${to}`,
     {
       headers: {
         Authorization: `Bearer ${accessToken}`,

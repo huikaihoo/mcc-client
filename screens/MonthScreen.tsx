@@ -6,7 +6,7 @@ import MonthView from '../components/MonthView';
 export default function TabMonthScreen() {
   return (
     <View style={styles.container}>
-      <MonthView></MonthView>
+      <MonthView/>
     </View>
   );
 }
