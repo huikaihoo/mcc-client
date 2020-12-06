@@ -93,21 +93,30 @@ function RootNavigator() {
       },
       fetchRecords: async (data: { accessToken: string, from: number, to: number }) => {
         try {
-          const result = await recordsApi({
-            offset: 0,
-            limit: 100,
-            ...data
-          });
-          // console.log(data, result.data);
-          if (result.data.total > 0 && result.data.results.length > 0) {
-            const results = result.data.results
-            const records: { [key: string]: any } = {};
-            results.forEach(result => {
-              records[result.id] = result;
-            })
-            console.log(records);
-            dispatch({ type: 'ADD_RECORDS', records });
-          }
+          const records: { [key: string]: any } = {};
+
+          let offset = 0;
+          let needContinue = true;
+          do {
+            const result = await recordsApi({
+              offset,
+              limit: 100,
+              ...data
+            });
+            // console.log(data, result.data);
+            if (result.data.total > 0 && result.data.results.length > 0) {
+              const results = result.data.results
+  
+              results.forEach(result => {
+                records[result.id] = result;
+              })
+            }
+            needContinue = (result.data.total > 100) && (result.data.results.length > 0);
+            offset += 100;
+          } while (needContinue);
+
+          // console.log(records);
+          dispatch({ type: 'ADD_RECORDS', records });
         } catch (err) {
           dispatch({ type: 'MESSAGE', message: 'invalid login credentials' });
           console.log(err);

@@ -13,13 +13,6 @@ const convert = (records: any, current: number) => {
     const to = moment(current).startOf('month').add(2, 'month');
     for (let m = moment(from); m.isBefore(to); m.add(1, 'day')) {
       items[m.format('YYYY-MM-DD')] = [];
-      // if (m.day() % 3 === 0) {
-      //   items[m.format('YYYY-MM-DD')].push({
-      //     id: m.format('YYYY-MM-DD'),
-      //     patientName: 'Dummy',
-      //     datetime: moment().format(),
-      //   })
-      // }
     }
   }
 
