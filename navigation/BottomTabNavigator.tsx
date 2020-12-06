@@ -3,29 +3,45 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as React from 'react';
 
-import Colors from '../constants/Colors';
-
 import MonthScreen from '../screens/MonthScreen';
+import WeekScreen from '../screens/WeekScreen';
+import DayScreen from '../screens/DayScreen';
 import SettingsScreen from '../screens/SettingsScreen';
-import { BottomTabParamList, TabOneParamList, TabTwoParamList } from '../types';
+import { BottomTabParamList, TabMonthParamList, TabWeekParamList, TabDayParamList, TabSettingsParamList } from '../types';
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
 export default function BottomTabNavigator() {
 
   return (
-    <BottomTab.Navigator initialRouteName="TabOne">
+    <BottomTab.Navigator initialRouteName="TabMonth">
       <BottomTab.Screen
-        name="TabOne"
-        component={TabOneNavigator}
+        name="TabMonth"
+        component={TabMonthNavigator}
         options={{
           tabBarLabel: "Month",
           tabBarIcon: ({ color }) => <TabBarIcon name="md-calendar" color={color} />,
         }}
       />
       <BottomTab.Screen
-        name="TabTwo"
-        component={TabTwoNavigator}
+        name="TabWeek"
+        component={TabWeekNavigator}
+        options={{
+          tabBarLabel: "Week",
+          tabBarIcon: ({ color }) => <TabBarIcon name="ios-list-box" color={color} />,
+        }}
+      />
+      <BottomTab.Screen
+        name="TabDay"
+        component={TabDayNavigator}
+        options={{
+          tabBarLabel: "Day",
+          tabBarIcon: ({ color }) => <TabBarIcon name="md-today" color={color} />,
+        }}
+      />
+      <BottomTab.Screen
+        name="TabSettings"
+        component={TabSettingsNavigator}
         options={{
           tabBarLabel: "Settings",
           tabBarIcon: ({ color }) => <TabBarIcon name="md-settings" color={color} />,
@@ -43,30 +59,58 @@ function TabBarIcon(props: { name: string; color: string }) {
 
 // Each tab has its own navigation stack, you can read more about this pattern here:
 // https://reactnavigation.org/docs/tab-based-navigation#a-stack-navigator-for-each-tab
-const TabOneStack = createStackNavigator<TabOneParamList>();
+const TabMonthStack = createStackNavigator<TabMonthParamList>();
 
-function TabOneNavigator() {
+function TabMonthNavigator() {
   return (
-    <TabOneStack.Navigator>
-      <TabOneStack.Screen
-        name="TabOneScreen"
+    <TabMonthStack.Navigator>
+      <TabMonthStack.Screen
+        name="TabMonthScreen"
         component={MonthScreen}
-        options={{ headerTitle: 'Month' }}
+        options={{ headerTitle: 'Month View' }}
       />
-    </TabOneStack.Navigator>
+    </TabMonthStack.Navigator>
   );
 }
 
-const TabTwoStack = createStackNavigator<TabTwoParamList>();
+const TabWeekParamStack = createStackNavigator<TabWeekParamList>();
 
-function TabTwoNavigator() {
+function TabWeekNavigator() {
   return (
-    <TabTwoStack.Navigator>
-      <TabTwoStack.Screen
-        name="TabTwoScreen"
+    <TabWeekParamStack.Navigator>
+      <TabWeekParamStack.Screen
+        name="TabWeekScreen"
+        component={WeekScreen}
+        options={{ headerTitle: 'Week View' }}
+      />
+    </TabWeekParamStack.Navigator>
+  );
+}
+
+const TabDayStack = createStackNavigator<TabDayParamList>();
+
+function TabDayNavigator() {
+  return (
+    <TabDayStack.Navigator>
+      <TabDayStack.Screen
+        name="TabDayScreen"
+        component={DayScreen}
+        options={{ headerTitle: 'Day View' }}
+      />
+    </TabDayStack.Navigator>
+  );
+}
+
+const TabSettingsStack = createStackNavigator<TabSettingsParamList>();
+
+function TabSettingsNavigator() {
+  return (
+    <TabSettingsStack.Navigator>
+      <TabSettingsStack.Screen
+        name="TabSettingsScreen"
         component={SettingsScreen}
         options={{ headerTitle: 'Settings' }}
       />
-    </TabTwoStack.Navigator>
+    </TabSettingsStack.Navigator>
   );
 }

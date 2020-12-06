@@ -1,4 +1,4 @@
-import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as React from 'react';
 import { Alert, ColorSchemeName } from 'react-native';
@@ -56,15 +56,16 @@ function RootNavigator() {
   const authContext = React.useMemo(
     () => ({
       signIn: async (data: { email: string, password: string}) => {
-        try {
-          const result = await signinApi(data);
-          if (result.data.accessToken) {
-            dispatch({ type: 'SIGN_IN', token: result.data.accessToken });
-          }
-        } catch (err) {
-          dispatch({ type: 'MESSAGE', message: 'invalid login credentials' });
-          console.log(err);
-        }
+        dispatch({ type: 'SIGN_IN', token: '123' });
+        // try {
+        //   const result = await signinApi(data);
+        //   if (result.data.accessToken) {
+        //     dispatch({ type: 'SIGN_IN', token: result.data.accessToken });
+        //   }
+        // } catch (err) {
+        //   dispatch({ type: 'MESSAGE', message: 'invalid login credentials' });
+        //   console.log(err);
+        // }
       },
       signOut: () => dispatch({ type: 'SIGN_OUT' }),
       signUp: async (data: any) => {
@@ -78,9 +79,9 @@ function RootNavigator() {
             }
           }
         } catch (err) {
-          if (err.response.status === 401) {
+          if (err.response && err.response.status === 401) {
             dispatch({ type: 'MESSAGE', message: 'invalid login credentials' });
-          } else if (err.response.data && err.response.data.message) {
+          } else if (err.response && err.response.data && err.response.data.message) {
             dispatch({ type: 'MESSAGE', message: err.response.data.message });
           } else {
             dispatch({ type: 'MESSAGE', message: 'failed to create new account' });

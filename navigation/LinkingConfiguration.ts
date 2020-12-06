@@ -9,14 +9,24 @@ export default {
       Loading: "loading",
       Root: {
         screens: {
-          TabOne: {
+          TabMonth: {
             screens: {
-              TabOneScreen: "one",
+              TabMonthScreen: "month",
             },
           },
-          TabTwo: {
+          TabWeek: {
             screens: {
-              TabTwoScreen: "two",
+              TabWeekScreen: "week",
+            },
+          },
+          TabDay: {
+            screens: {
+              TabDayScreen: "day",
+            },
+          },
+          TabSettings: {
+            screens: {
+              TabSettingsScreen: "settings",
             },
           },
         },

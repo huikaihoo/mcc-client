@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import MonthView from '../components/MonthView';
+import WeekView from '../components/WeekView';
 
-export default function TabMonthScreen() {
+export default function TabWeekScreen() {
   return (
     <View style={styles.container}>
-      <MonthView></MonthView>
+      <WeekView></WeekView>
     </View>
   );
 }

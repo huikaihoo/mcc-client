@@ -6,14 +6,24 @@ export type RootStackParamList = {
 };
 
 export type BottomTabParamList = {
-  TabOne: undefined;
-  TabTwo: undefined;
+  TabMonth: undefined;
+  TabWeek: undefined;
+  TabDay: undefined;
+  TabSettings: undefined;
 };
 
-export type TabOneParamList = {
-  TabOneScreen: undefined;
+export type TabMonthParamList = {
+  TabMonthScreen: undefined;
 };
 
-export type TabTwoParamList = {
-  TabTwoScreen: undefined;
+export type TabWeekParamList = {
+  TabWeekScreen: undefined;
+};
+
+export type TabDayParamList = {
+  TabDayScreen: undefined;
+};
+
+export type TabSettingsParamList = {
+  TabSettingsScreen: undefined;
 };

@@ -1,9 +1,16 @@
-import React, {Component} from 'react';
-import {Alert, StyleSheet, Text, View, TouchableOpacity} from 'react-native';
-import {Agenda} from 'react-native-calendars';
+import React, { Component } from 'react';
+import { Alert, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { Agenda } from 'react-native-calendars';
 
-export default class MonthAgenda extends Component {
-  constructor(props) {
+interface IProps {
+}
+
+interface IState {
+  items: { [key:string]:any; } ;
+}
+
+export default class MonthView extends Component<IProps, IState> {
+  constructor(props: any) {
     super(props);
 
     this.state = {
@@ -43,7 +50,7 @@ export default class MonthAgenda extends Component {
     );
   }
 
-  loadItems(day) {
+  loadItems(day: any) {
     setTimeout(() => {
       for (let i = -15; i < 85; i++) {
         const time = day.timestamp + i * 24 * 60 * 60 * 1000;
@@ -59,7 +66,7 @@ export default class MonthAgenda extends Component {
           }
         }
       }
-      const newItems = {};
+      const newItems: { [key:string]:any;} = {};
       Object.keys(this.state.items).forEach(key => {
         newItems[key] = this.state.items[key];
       });
@@ -69,7 +76,7 @@ export default class MonthAgenda extends Component {
     }, 1000);
   }
 
-  renderItem(item) {
+  renderItem(item: any) {
     return (
       <TouchableOpacity
         style={[styles.item, {height: item.height}]}
@@ -88,11 +95,11 @@ export default class MonthAgenda extends Component {
     );
   }
 
-  rowHasChanged(r1, r2) {
+  rowHasChanged(r1: any, r2: any) {
     return r1.name !== r2.name;
   }
 
-  timeToString(time) {
+  timeToString(time: any) {
     const date = new Date(time);
     return date.toISOString().split('T')[0];
   }
